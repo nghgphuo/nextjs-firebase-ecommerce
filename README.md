@@ -33,7 +33,11 @@ This is my first project using Next.js, created as a practice and learning exerc
 - deleted_at: string
 - created_at: string
 - updated_at: string
-  Categories
+```
+
+### Categories
+
+```
 - name: string
 - slug: string
 - description: string // html
