@@ -12,14 +12,25 @@ import {
 import { COLLECTIONS } from "@/constants/common";
 import { db } from "@/utils/firebase";
 
-export const createAdmin = async (data: ICreateAdminInput) => {
-  const adminRef = collection(db, COLLECTIONS.ADMIN);
+const adminRef = collection(db, COLLECTIONS.ADMIN);
 
+export const findAdminByEmail = async (email: string): Promise<IAdminDB> => {
   const existedAdmin = await getDocs(
-    query(adminRef, where("email", "==", data.email))
+    query(adminRef, where("email", "==", email))
   );
 
-  if (existedAdmin.docs.length) {
+  const admin = existedAdmin.docs[0].data() as IAdminDB;
+
+  return {
+    ...admin,
+    id: existedAdmin.docs[0].id,
+  };
+};
+
+export const createAdmin = async (data: ICreateAdminInput) => {
+  const existedAdmin = await findAdminByEmail(data.email);
+
+  if (existedAdmin) {
     throw Error("Email is existed!");
   }
 
